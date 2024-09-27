@@ -1,0 +1,33 @@
+///////////////////////////////////////////////////////////////
+///////		このマクロはASEPRITEファイル用です
+///////　参考: https://github.com/aseprite/aseprite/blob/main/docs/ase-file-specs.md
+
+#include "typedef.h"
+#maxloop -1
+
+typedef short SHORT;
+
+struct HEADER {
+    DWORD file_size;
+    WORD magic_number;
+    WORD frames;
+    WORD width_in_pixels;
+    WORD height_in_pixels;
+    WORD color_depth;
+    DWORD flags;
+    WORD speed;
+    DWORD set_be_0_1;
+    DWORD set_be_0_2;
+    BYTE palette_entry;
+    BYTE ignore_these_bytes[3];
+    WORD num_of_colors;
+    BYTE pixel_width;
+    BYTE pixel_height;
+    SHORT x_position_of_grid;
+    SHORT y_position_of_grid;
+    WORD grid_width;
+    WORD gird_height;
+    BYTE future_bits[84];
+};
+
+$HEADER header;
