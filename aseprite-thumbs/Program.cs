@@ -1,5 +1,4 @@
-﻿using AsepriteThumbs;
-using AsepriteThumbs.FileFormats;
+﻿using AsepriteThumbs.FileFormats;
 using ConsoleAppFramework;
 
 ConsoleApp.Run(args, Commands.ReadAsepriteFile);

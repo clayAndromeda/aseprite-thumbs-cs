@@ -1,0 +1,139 @@
+using System.Text;
+
+namespace AsepriteThumbs.FileFormats;
+
+public class RGB255 : IBinaryReadable<RGB255>
+{
+	public Byte R { get; set; }
+	public Byte G { get; set; }
+	public Byte B { get; set; }
+	
+	public static RGB255 ReadBinary(BinaryReader reader)
+	{
+		var ret = new RGB255();
+		ret.R = reader.ReadByte();
+		ret.G = reader.ReadByte();
+		ret.B = reader.ReadByte();
+		return ret;
+	}
+}
+
+public class RGB63 : IBinaryReadable<RGB63>
+{
+	public Byte R { get; set; }
+	public Byte G { get; set; }
+	public Byte B { get; set; }
+	
+	public static RGB63 ReadBinary(BinaryReader reader)
+	{
+		var ret = new RGB63();
+		ret.R = reader.ReadByte();
+		ret.G = reader.ReadByte();
+		ret.B = reader.ReadByte();
+		return ret;
+	}
+}
+
+public class RGBA : IBinaryReadable<RGBA>
+{
+	public Byte R { get; set; }
+	public Byte G { get; set; }
+	public Byte B { get; set; }
+	public Byte A { get; set; }
+	
+	public static RGBA ReadBinary(BinaryReader reader)
+	{
+		var ret = new RGBA();
+		ret.R = reader.ReadByte();
+		ret.G = reader.ReadByte();
+		ret.B = reader.ReadByte();
+		ret.A = reader.ReadByte();
+		return ret;
+	}
+}
+
+public class STRING : IBinaryReadable<STRING>
+{
+	public string Value { get; set; }
+	
+	public static STRING ReadBinary(BinaryReader reader)
+	{
+		// 先頭4Byteは文字列の長さ
+		// その後にUTF-8文字列が続く。'\0'は含まれない
+		var ret = new STRING();
+		var length = reader.ReadUInt32();
+		var bytes = reader.ReadBytes((int)length);
+		ret.Value = Encoding.UTF8.GetString(bytes);
+
+		return ret;
+	}
+}
+
+public class POINT : IBinaryReadable<POINT>
+{
+	public Int32 X { get; set; }
+	public Int32 Y { get; set; }
+	
+	public static POINT ReadBinary(BinaryReader reader)
+	{
+		var ret = new POINT();
+		ret.X = reader.ReadInt32();
+		ret.Y = reader.ReadInt32();
+		return ret;
+	}
+}
+
+public class SIZE : IBinaryReadable<SIZE>
+{
+	public Int32 Width { get; set; }
+	public Int32 Height { get; set; }
+	
+	public static SIZE ReadBinary(BinaryReader reader)
+	{
+		var ret = new SIZE();
+		ret.Width = reader.ReadInt32();
+		ret.Height = reader.ReadInt32();
+		return ret;
+	}
+}
+
+public class RECT : IBinaryReadable<RECT>
+{
+	public POINT OriginCoordinate { get; set; }
+	public SIZE RectableSize { get; set; }
+	public static RECT ReadBinary(BinaryReader reader)
+	{
+		var ret = new RECT();
+		ret.OriginCoordinate = POINT.ReadBinary(reader);
+		ret.RectableSize = SIZE.ReadBinary(reader);
+		return ret;
+	}
+}
+
+public class PIXEL : IBinaryReadable<PIXEL>
+{
+	public RGBA Color { get; set; }
+	public Byte[] Grayscale { get; set; } = new Byte[2];
+	public Byte Indexed { get; set; }
+	
+	public static PIXEL ReadBinary(BinaryReader reader)
+	{
+		var ret = new PIXEL();
+		ret.Color = RGBA.ReadBinary(reader);
+		ret.Grayscale = reader.ReadBytes(2);
+		ret.Indexed = reader.ReadByte();
+		return ret;
+	}
+}
+
+public class UUID : IBinaryReadable<UUID>
+{
+	public Byte[] Data { get; set; } = new Byte[16];
+	
+	public static UUID ReadBinary(BinaryReader reader)
+	{
+		var ret = new UUID();
+		ret.Data = reader.ReadBytes(16);
+		return ret;
+	}
+}

@@ -1,27 +1,28 @@
 namespace AsepriteThumbs.FileFormats;
 
-public class AsepriteHeader
+public class AsepriteHeader : IBinaryReadable<AsepriteHeader>
 {
-	public UInt32 FileSize { get; set; }
-	public UInt16 MagicNumber { get; set; }
-	public UInt16 Frames { get; set; }
-	public UInt16 Width { get; set; }
-	public UInt16 Height { get; set; }
-	public UInt16 Depth { get; set; }
-	public UInt32 Flags { get; set; }
-	public UInt16 Speed { get; set; }
-	public UInt32 Reserved1 { get; set; }
-	public UInt32 Reserved2 { get; set; }
-	public Byte PaletteEntry { get; set; }
-	public Byte[] IgnoreBytes { get; set; } = new Byte[3];
-	public UInt16 NumOfColors { get; set; }
-	public Byte PixelWidth { get; set; }
-	public Byte PixelHeight { get; set; }
-	public Int16 XPositionOfGrid { get; set; }
-	public Int16 YPositionOfGrid { get; set; }
-	public UInt16 GridWidth { get; set; }
-	public UInt16 GridHeight { get; set; }
-	// 84Bytesの予約領域がある
+	public uint FileSize { get; set; }
+	public ushort MagicNumber { get; set; }
+	public ushort Frames { get; set; }
+	public ushort Width { get; set; }
+	public ushort Height { get; set; }
+	public ushort Depth { get; set; }
+	public uint Flags { get; set; }
+	public ushort Speed { get; set; }
+	public uint Reserved1 { get; set; }
+	public uint Reserved2 { get; set; }
+	public byte PaletteEntry { get; set; }
+	public byte[] IgnoreBytes { get; set; } = new byte[3];
+	public ushort NumOfColors { get; set; }
+	public byte PixelWidth { get; set; }
+	public byte PixelHeight { get; set; }
+	public short XPositionOfGrid { get; set; }
+	public short YPositionOfGrid { get; set; }
+	public ushort GridWidth { get; set; }
+	public ushort GridHeight { get; set; }
+	
+	// この後に84Bytesの予約領域がある
 
 	public static AsepriteHeader ReadBinary(BinaryReader reader)
 	{
