@@ -61,7 +61,7 @@ public class STRING : IBinaryReadable<STRING>
 		// 先頭4Byteは文字列の長さ
 		// その後にUTF-8文字列が続く。'\0'は含まれない
 		var ret = new STRING();
-		var length = reader.ReadUInt32();
+		var length = reader.ReadUInt16();
 		var bytes = reader.ReadBytes((int)length);
 		ret.Value = Encoding.UTF8.GetString(bytes);
 

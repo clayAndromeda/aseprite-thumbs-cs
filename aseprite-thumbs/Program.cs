@@ -13,6 +13,11 @@ static class Commands
 		
 		// inputPathにあるファイルをBinaryReaderで読み込む
 		using var reader = new BinaryReader(new MemoryStream(fileBytes));
-		var header = AsepriteHeader.ReadBinary(reader);
+		AsepriteHeader fileHeader = AsepriteHeader.ReadBinary(reader);
+		
+		// とりあえず先頭フレームだけ読み取る
+		Frame frame = Frame.ReadBinary(reader);
+		
+		Console.WriteLine($"Frame Header: {frame.Header.MagicNumber:X8}");
 	}
 }
