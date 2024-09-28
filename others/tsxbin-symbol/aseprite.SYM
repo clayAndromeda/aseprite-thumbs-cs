@@ -1,15 +1,18 @@
 ///////////////////////////////////////////////////////////////
 ///////		このマクロはASEPRITEファイル用です
 ///////　参考: https://github.com/aseprite/aseprite/blob/main/docs/ase-file-specs.md
+///////////////////////////////////////////////////////////////
 
 #include "typedef.h"
 #maxloop -1
 
 typedef short SHORT;
 
+void Frame(void);
+
 struct HEADER {
     DWORD file_size;
-    WORD magic_number;
+    WORD magic_number; // 0xA5E0
     WORD frames;
     WORD width_in_pixels;
     WORD height_in_pixels;
@@ -30,4 +33,107 @@ struct HEADER {
     BYTE future_bits[84];
 };
 
+struct FRAME_HEADER {
+    DWORD bytes_in_this_frame;
+    WORD magic_number; // 0xF1FA
+    WORD oldField;
+    WORD frame_duration;
+    BYTE future_bits[2];
+    DWORD the_number_of_chunk;
+};
+
+
+///////////////////////////////////////////////////////////////
+//	main
 $HEADER header;
+for (int i = 0; i < header.frames; ++i) {
+    Frame();
+}
+return;
+
+///////////////////////////////////////////////////////////////
+//	フレーム読み込み
+void Frame(void)
+{
+    $FRAME_HEADER frame_header;
+    for (int i = 0; i < frame_header.the_number_of_chunk; ++i)
+    {
+        $DWORD chunk_size;
+        $WORD chunk_type;
+
+        if (chunk_type == 0x0004)
+        {
+            // old_palette_chunk
+            $BYTE old_palette_1_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x0011)
+        {
+            // old_palette_chunk_2
+            $BYTE old_palette_2_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2004)
+        {
+            // layer_chunk
+            $BYTE layer_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2005)
+        {
+            // cel_chunk
+            $BYTE cel_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2006)
+        {
+            // cel_extra_chunk
+            $BYTE cel_extra_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2007)
+        {
+            // color_profile_chunk
+            $BYTE color_profile_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2008)
+        {
+            // external_file_chunk
+            $BYTE external_file_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2016)
+        {
+            // deprecated
+            $BYTE deprecated_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2017)
+        {
+            // path_chunk (never used)
+            $BYTE path_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2018)
+        {
+            // tags_chunk (never used)
+            $BYTE tags_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2019)
+        {
+            // palette_chunk (never used)
+            $BYTE palette_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2020)
+        {
+            // userdata_chunk (never used)
+            $BYTE userdata_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2022)
+        {
+            // slice_chunk (never used)
+            $BYTE slice_chunk_data[chunk_size - 6];
+        }
+        else if (chunk_type == 0x2023)
+        {
+            // tileset_chunk (never used)
+            $BYTE tileset_chunk_data[chunk_size - 6];
+        }
+        else
+        {
+            $BYTE unknown_chunk_data[chunk_size - 6];
+        }
+    }
+}
