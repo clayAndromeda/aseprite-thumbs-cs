@@ -1,24 +1,24 @@
 namespace AsepriteThumbs.FileFormats.Chunks;
 
-public class LayerChunk : IBinaryReadable<LayerChunk>
+public class LayerChunk : IBinaryReadableChunk<LayerChunk>
 {
     /*
      * Layer Chunk (0x2004)
 	 * In the first frame should be a set of layer chunks to determine the entire layers layout:
      */
     
-    public UInt16 Flags { get; set; }
-    public UInt16 LayerType { get; set; }
-    public UInt16 LayerChildLevel { get; set; }
-    public UInt16 DefaultLayerWidth { get; set; }
-    public UInt16 DefaultLayerHeight { get; set; }
-    public UInt16 BlendMode { get; set; }
-    public Byte Opacity { get; set; }
-    public Byte[] ForFuture { get; set; } = new byte[3];
+    public ushort Flags { get; set; }
+    public ushort LayerType { get; set; }
+    public ushort LayerChildLevel { get; set; }
+    public ushort DefaultLayerWidth { get; set; }
+    public ushort DefaultLayerHeight { get; set; }
+    public ushort BlendMode { get; set; }
+    public byte Opacity { get; set; }
+    public byte[] ForFuture { get; set; } = new byte[3];
     public STRING LayerName { get; set; }
-    public UInt32? TilesetIndex { get; set; }
+    public uint? TilesetIndex { get; set; }
 
-    public static LayerChunk ReadBinary(BinaryReader reader)
+    public static LayerChunk ReadBinary(BinaryReader reader, ChunkHeader header)
     {
         var ret = new LayerChunk();
         ret.Flags = reader.ReadUInt16();

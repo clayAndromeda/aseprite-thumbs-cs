@@ -10,8 +10,12 @@
   <component name="ChangeListManager">
     <list default="true" id="ff669236-a3e1-448f-9eac-af898d286f3f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.aseprite-thumbs-cs/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.aseprite-thumbs-cs/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/DecompressTest/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/DecompressTest/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aseprite-thumbs/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/aseprite-thumbs/Program.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/ChunkHeader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/ChunkHeader.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/Chunks/CelChunk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/Chunks/CelChunk.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/Chunks/LayerChunk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/Chunks/LayerChunk.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/Chunks/OldPalette04Chunk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/Chunks/OldPalette04Chunk.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/Chunks/OldPalette11Chunk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/Chunks/OldPalette11Chunk.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/UtilityTypes.cs" beforeDir="false" afterPath="$PROJECT_DIR$/aseprite-thumbs/FileFormats/UtilityTypes.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,6 +30,9 @@
   "associatedIndex": 7
 }]]></component>
   <component name="ProjectId" id="2mgzEBEpbzzBjgT2TCP6NoTU9sz" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -102,7 +109,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1727512894588</updated>
-      <workItem from="1727512896600" duration="4160000" />
+      <workItem from="1727512896600" duration="7103000" />
     </task>
     <servers />
   </component>

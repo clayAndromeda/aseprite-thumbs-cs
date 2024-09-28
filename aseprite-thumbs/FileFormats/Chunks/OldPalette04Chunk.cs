@@ -1,6 +1,6 @@
 namespace AsepriteThumbs.FileFormats.Chunks;
 
-public class OldPalette04Chunk : IBinaryReadable<OldPalette04Chunk>
+public class OldPalette04Chunk : IBinaryReadableChunk<OldPalette04Chunk>
 {
 	/*
 	 * Old palette chunk (0x0004)
@@ -11,21 +11,21 @@ public class OldPalette04Chunk : IBinaryReadable<OldPalette04Chunk>
 	 * in other case the new palette chunk (0x2019) will be used (and the old one is not saved anymore).
 	 */
 	
-	public UInt32 NumOfPackets { get; set; }
+	public uint NumOfPackets { get; set; }
 	public Packet[] Packets { get; set; }
-
+	
 	public class Packet
 	{
-		public Byte numOfPaletteEntries { get; set; }
-		public Byte numOfColors { get; set; }
+		public byte numOfPaletteEntries { get; set; }
+		public byte numOfColors { get; set; }
 		public RGB255[] Colors { get; set; }
 	}
 
-	public static OldPalette04Chunk ReadBinary(BinaryReader reader)
+	public static OldPalette04Chunk ReadBinary(BinaryReader reader, ChunkHeader header)
 	{
 		var ret = new OldPalette04Chunk();
 		ret.NumOfPackets = reader.ReadUInt32();
-		
+
 		Packet[] packets = new Packet[ret.NumOfPackets];
 		for (int i = 0; i < packets.Length; ++i)
 		{
@@ -37,8 +37,10 @@ public class OldPalette04Chunk : IBinaryReadable<OldPalette04Chunk>
 			{
 				packet.Colors[j] = RGB255.ReadBinary(reader);
 			}
+
 			packets[i] = packet;
 		}
+
 		ret.Packets = packets;
 
 		return ret;

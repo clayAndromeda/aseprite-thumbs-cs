@@ -1,6 +1,6 @@
 namespace AsepriteThumbs.FileFormats.Chunks;
 
-public class OldPalette11Chunk : IBinaryReadable<OldPalette11Chunk>
+public class OldPalette11Chunk : IBinaryReadableChunk<OldPalette11Chunk>
 {
 	/*
 	 * Old palette chunk (0x0011)
@@ -9,18 +9,18 @@ public class OldPalette11Chunk : IBinaryReadable<OldPalette11Chunk>
 	 */
 	
 	
-	public UInt16 NumOfPackets { get; set; }
+	public ushort NumOfPackets { get; set; }
 	public Packet[] Packets { get; set; }
 	
 	public class Packet
 	{
-		public Byte NumOfPaletteEntries { get; set; }
-		public Byte NumOfColors { get; set; }
+		public byte NumOfPaletteEntries { get; set; }
+		public byte NumOfColors { get; set; }
 		public RGB63[] Colors { get; set; }
 	}
 	
 	
-	public static OldPalette11Chunk ReadBinary(BinaryReader reader)
+	public static OldPalette11Chunk ReadBinary(BinaryReader reader, ChunkHeader header)
 	{
 		var ret = new OldPalette11Chunk();
 		ret.NumOfPackets = reader.ReadUInt16();
@@ -35,10 +35,12 @@ public class OldPalette11Chunk : IBinaryReadable<OldPalette11Chunk>
 			{
 				packet.Colors[j] = RGB63.ReadBinary(reader);
 			}
+
 			packets[i] = packet;
 		}
+
 		ret.Packets = packets;
-		
+
 		return ret;
 	}
 }

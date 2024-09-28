@@ -4,9 +4,9 @@ namespace AsepriteThumbs.FileFormats;
 
 public class RGB255 : IBinaryReadable<RGB255>
 {
-	public Byte R { get; set; }
-	public Byte G { get; set; }
-	public Byte B { get; set; }
+	public byte R { get; set; }
+	public byte G { get; set; }
+	public byte B { get; set; }
 	
 	public static RGB255 ReadBinary(BinaryReader reader)
 	{
@@ -20,9 +20,9 @@ public class RGB255 : IBinaryReadable<RGB255>
 
 public class RGB63 : IBinaryReadable<RGB63>
 {
-	public Byte R { get; set; }
-	public Byte G { get; set; }
-	public Byte B { get; set; }
+	public byte R { get; set; }
+	public byte G { get; set; }
+	public byte B { get; set; }
 	
 	public static RGB63 ReadBinary(BinaryReader reader)
 	{
@@ -36,10 +36,10 @@ public class RGB63 : IBinaryReadable<RGB63>
 
 public class RGBA : IBinaryReadable<RGBA>
 {
-	public Byte R { get; set; }
-	public Byte G { get; set; }
-	public Byte B { get; set; }
-	public Byte A { get; set; }
+	public byte R { get; set; }
+	public byte G { get; set; }
+	public byte B { get; set; }
+	public byte A { get; set; }
 	
 	public static RGBA ReadBinary(BinaryReader reader)
 	{
@@ -71,8 +71,8 @@ public class STRING : IBinaryReadable<STRING>
 
 public class POINT : IBinaryReadable<POINT>
 {
-	public Int32 X { get; set; }
-	public Int32 Y { get; set; }
+	public int X { get; set; }
+	public int Y { get; set; }
 	
 	public static POINT ReadBinary(BinaryReader reader)
 	{
@@ -85,8 +85,8 @@ public class POINT : IBinaryReadable<POINT>
 
 public class SIZE : IBinaryReadable<SIZE>
 {
-	public Int32 Width { get; set; }
-	public Int32 Height { get; set; }
+	public int Width { get; set; }
+	public int Height { get; set; }
 	
 	public static SIZE ReadBinary(BinaryReader reader)
 	{
@@ -113,8 +113,8 @@ public class RECT : IBinaryReadable<RECT>
 public class PIXEL : IBinaryReadable<PIXEL>
 {
 	public RGBA Color { get; set; }
-	public Byte[] Grayscale { get; set; } = new Byte[2];
-	public Byte Indexed { get; set; }
+	public byte[] Grayscale { get; set; } = new byte[2];
+	public byte Indexed { get; set; }
 	
 	public static PIXEL ReadBinary(BinaryReader reader)
 	{
@@ -128,7 +128,7 @@ public class PIXEL : IBinaryReadable<PIXEL>
 
 public class UUID : IBinaryReadable<UUID>
 {
-	public Byte[] Data { get; set; } = new Byte[16];
+	public byte[] Data { get; set; } = new byte[16];
 	
 	public static UUID ReadBinary(BinaryReader reader)
 	{
