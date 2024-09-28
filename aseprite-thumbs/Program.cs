@@ -14,7 +14,5 @@ static class Commands
 		// inputPathにあるファイルをBinaryReaderで読み込む
 		using var reader = new BinaryReader(new MemoryStream(fileBytes));
 		var header = AsepriteHeader.ReadBinary(reader);
-		
-		
 	}
 }
