@@ -1,3 +1,5 @@
+using SixLabors.ImageSharp.PixelFormats;
+
 namespace AsepriteThumbs.FileFormats.Chunks;
 
 public class OldPalette04Chunk : IBinaryReadableChunk<OldPalette04Chunk>
@@ -11,8 +13,16 @@ public class OldPalette04Chunk : IBinaryReadableChunk<OldPalette04Chunk>
 	 * in other case the new palette chunk (0x2019) will be used (and the old one is not saved anymore).
 	 */
 	
-	public uint NumOfPackets { get; set; }
+	public ushort NumOfPackets { get; set; }
 	public Packet[] Packets { get; set; }
+	
+	public Rgba32[] GetPaletteColors()
+	{
+		return Packets
+			.SelectMany(x => x.Colors)
+			.Select(x => x.ToRgba32())
+			.ToArray();
+	}
 	
 	public class Packet
 	{
@@ -24,7 +34,7 @@ public class OldPalette04Chunk : IBinaryReadableChunk<OldPalette04Chunk>
 	public static OldPalette04Chunk ReadBinary(BinaryReader reader, ChunkHeader header)
 	{
 		var ret = new OldPalette04Chunk();
-		ret.NumOfPackets = reader.ReadUInt32();
+		ret.NumOfPackets = reader.ReadUInt16();
 
 		Packet[] packets = new Packet[ret.NumOfPackets];
 		for (int i = 0; i < packets.Length; ++i)
@@ -32,7 +42,15 @@ public class OldPalette04Chunk : IBinaryReadableChunk<OldPalette04Chunk>
 			var packet = new Packet();
 			packet.numOfPaletteEntries = reader.ReadByte();
 			packet.numOfColors = reader.ReadByte();
-			packet.Colors = new RGB255[packet.numOfColors];
+			if (packet.numOfColors == 0)
+			{
+				packet.Colors = new RGB255[256];
+			}
+			else
+			{
+				packet.Colors = new RGB255[packet.numOfColors];
+			}
+			
 			for (int j = 0; j < packet.Colors.Length; ++j)
 			{
 				packet.Colors[j] = RGB255.ReadBinary(reader);

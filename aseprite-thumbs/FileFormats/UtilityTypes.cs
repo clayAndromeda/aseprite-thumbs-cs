@@ -1,4 +1,5 @@
 using System.Text;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace AsepriteThumbs.FileFormats;
 
@@ -16,10 +17,16 @@ public class RGB255 : IBinaryReadable<RGB255>
 		ret.B = reader.ReadByte();
 		return ret;
 	}
+	
+	public Rgba32 ToRgba32()
+	{
+		return new Rgba32(R, G, B, 255);
+	}
 }
 
 public class RGB63 : IBinaryReadable<RGB63>
 {
+	// 0-63で表現
 	public byte R { get; set; }
 	public byte G { get; set; }
 	public byte B { get; set; }
@@ -31,6 +38,12 @@ public class RGB63 : IBinaryReadable<RGB63>
 		ret.G = reader.ReadByte();
 		ret.B = reader.ReadByte();
 		return ret;
+	}
+	
+	public Rgba32 ToRgba32()
+	{
+		// 0-63を0-255に変換
+		return new Rgba32(R * 4, G * 4, B * 4, 255);
 	}
 }
 
@@ -49,6 +62,11 @@ public class RGBA : IBinaryReadable<RGBA>
 		ret.B = reader.ReadByte();
 		ret.A = reader.ReadByte();
 		return ret;
+	}
+
+	public Rgba32 ToRgba32()
+	{
+		return new Rgba32(R, G, B, A);
 	}
 }
 

@@ -7,7 +7,7 @@ public class AsepriteHeader : IBinaryReadable<AsepriteHeader>
 	public ushort Frames { get; set; }
 	public ushort Width { get; set; }
 	public ushort Height { get; set; }
-	public ushort Depth { get; set; }
+	public ushort ColorDepth { get; set; }
 	public uint Flags { get; set; }
 	public ushort Speed { get; set; }
 	public uint Reserved1 { get; set; }
@@ -32,7 +32,7 @@ public class AsepriteHeader : IBinaryReadable<AsepriteHeader>
 		ret.Frames = reader.ReadUInt16();
 		ret.Width = reader.ReadUInt16();
 		ret.Height = reader.ReadUInt16();
-		ret.Depth = reader.ReadUInt16();
+		ret.ColorDepth = reader.ReadUInt16();
 		ret.Flags = reader.ReadUInt32();
 		ret.Speed = reader.ReadUInt16();
 		ret.Reserved1 = reader.ReadUInt32();

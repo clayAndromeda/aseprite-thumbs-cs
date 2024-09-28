@@ -1,4 +1,5 @@
 using AsepriteThumbs.FileFormats.Chunks;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace AsepriteThumbs.FileFormats;
 
@@ -13,6 +14,26 @@ public class Frame : IBinaryReadable<Frame>
 	public List<OldPalette11Chunk> OldPalette11Chunks { get; set; } = new();
 
 	public List<NotSupportedChunk> NotSupportedChunks { get; set; } = new();
+	
+	public Rgba32[] GetPaletteColors()
+	{
+		if (PaletteChunks.Count != 0)
+		{
+			return PaletteChunks[0].GetPaletteColors();
+		}
+		else if (OldPalette04Chunks.Count != 0)
+		{
+			return OldPalette04Chunks[0].GetPaletteColors();
+		}
+		else if (OldPalette11Chunks.Count != 0)
+		{
+			return OldPalette11Chunks[0].GetPaletteColors();
+		}
+		else
+		{
+			return [new Rgba32(255, 255, 255, 255)];
+		}
+	}
 	
 	public static Frame ReadBinary(BinaryReader reader)
 	{

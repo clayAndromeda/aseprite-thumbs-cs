@@ -1,3 +1,5 @@
+using SixLabors.ImageSharp.PixelFormats;
+
 namespace AsepriteThumbs.FileFormats.Chunks;
 
 public class OldPalette11Chunk : IBinaryReadableChunk<OldPalette11Chunk>
@@ -11,6 +13,14 @@ public class OldPalette11Chunk : IBinaryReadableChunk<OldPalette11Chunk>
 	
 	public ushort NumOfPackets { get; set; }
 	public Packet[] Packets { get; set; }
+	
+	public Rgba32[] GetPaletteColors()
+	{
+		return Packets
+			.SelectMany(x => x.Colors)
+			.Select(x => x.ToRgba32())
+			.ToArray();
+	}
 	
 	public class Packet
 	{
@@ -30,7 +40,14 @@ public class OldPalette11Chunk : IBinaryReadableChunk<OldPalette11Chunk>
 			var packet = new Packet();
 			packet.NumOfPaletteEntries = reader.ReadByte();
 			packet.NumOfColors = reader.ReadByte();
-			packet.Colors = new RGB63[packet.NumOfColors];
+			if (packet.NumOfColors == 0)
+			{
+				packet.Colors = new RGB63[256];
+			}
+			else
+			{
+				packet.Colors = new RGB63[packet.NumOfColors];
+			}
 			for (int j = 0; j < packet.Colors.Length; ++j)
 			{
 				packet.Colors[j] = RGB63.ReadBinary(reader);

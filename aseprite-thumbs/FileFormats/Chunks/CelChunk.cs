@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using SixLabors.ImageSharp.PixelFormats;
 
 namespace AsepriteThumbs.FileFormats.Chunks;
 
@@ -26,7 +27,7 @@ public class CelChunk : IBinaryReadableChunk<CelChunk>
 	
 	// 共通で合計16Bytes使う
 	
-	public ImageData Image { get; set; }
+	public ImageData Data { get; set; }
 
 	public class ImageData
 	{
@@ -37,6 +38,46 @@ public class CelChunk : IBinaryReadableChunk<CelChunk>
 
 	public class LinkedCel { /* (unsupported) */ }
 	public class TileMap { /* (unsupported) */ }
+
+	public Rgba32[] GetPixels(ushort colorDepth, Rgba32[] palette)
+	{
+		Rgba32[] ret = new Rgba32[Data.Width * Data.Height];
+		if (colorDepth == 32)
+		{
+			for (int i = 0; i < ret.Length; ++i)
+			{
+				ret[i] = new Rgba32(
+					Data.ImageBytes[i * 4 + 0],
+					Data.ImageBytes[i * 4 + 1],
+					Data.ImageBytes[i * 4 + 2],
+					Data.ImageBytes[i * 4 + 3]);
+			}
+		}
+		else if (colorDepth == 16)
+		{
+			for (int i = 0; i < ret.Length; ++i)
+			{
+				ret[i] = new Rgba32(
+					Data.ImageBytes[i * 2 + 0],
+					Data.ImageBytes[i * 2 + 0],
+					Data.ImageBytes[i * 2 + 0],
+					Data.ImageBytes[i * 2 + 1]);
+			}
+		}
+		else if (colorDepth == 8)
+		{
+			for (int i = 0; i < ret.Length; ++i)
+			{
+				ret[i] = palette[Data.ImageBytes[i]];
+			}
+		}
+		else
+		{
+			throw new NotSupportedException($"Unsupported ColorDepth: {colorDepth}");
+		}
+
+		return ret;
+	}
 	
 	public static CelChunk ReadBinary(BinaryReader reader, ChunkHeader header)
 	{
@@ -51,11 +92,11 @@ public class CelChunk : IBinaryReadableChunk<CelChunk>
 
 		if (ret.CelType == 0)
 		{
-			ret.Image = new ImageData();
-			ret.Image.Width = reader.ReadUInt16();
-			ret.Image.Height = reader.ReadUInt16();
+			ret.Data = new ImageData();
+			ret.Data.Width = reader.ReadUInt16();
+			ret.Data.Height = reader.ReadUInt16();
 			// ChunkHeaderで6Bytes, CelChunk本体で16 + 4, 合計26Bytesを読み込んだ残りが画像データ
-			ret.Image.ImageBytes = reader.ReadBytes((int)(header.ChunkSize - 26));
+			ret.Data.ImageBytes = reader.ReadBytes((int)(header.ChunkSize - 26));
 		}
 		else if (ret.CelType == 1)
 		{
@@ -63,9 +104,9 @@ public class CelChunk : IBinaryReadableChunk<CelChunk>
 		}
 		else if (ret.CelType == 2)
 		{
-			ret.Image = new ImageData();
-			ret.Image.Width = reader.ReadUInt16();
-			ret.Image.Height = reader.ReadUInt16();
+			ret.Data = new ImageData();
+			ret.Data.Width = reader.ReadUInt16();
+			ret.Data.Height = reader.ReadUInt16();
 			// ChunkHeaderで6Bytes, CelChunk本体で16 + 4, 合計26Bytesを読み込んだ残りが画像データ
 			var compressedBytes = reader.ReadBytes((int)(header.ChunkSize - 26));
 			
@@ -74,7 +115,7 @@ public class CelChunk : IBinaryReadableChunk<CelChunk>
 			using var ds = new ZLibStream(ms, CompressionMode.Decompress);
 			using var resultStream = new MemoryStream();
 			ds.CopyTo(resultStream);
-			ret.Image.ImageBytes = resultStream.ToArray();
+			ret.Data.ImageBytes = resultStream.ToArray();
 		}
 		else if (ret.CelType == 3)
 		{

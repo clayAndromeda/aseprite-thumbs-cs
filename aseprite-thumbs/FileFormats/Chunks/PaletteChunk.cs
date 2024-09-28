@@ -1,3 +1,5 @@
+using SixLabors.ImageSharp.PixelFormats;
+
 namespace AsepriteThumbs.FileFormats.Chunks;
 
 public class PaletteChunk : IBinaryReadableChunk<PaletteChunk>
@@ -12,6 +14,11 @@ public class PaletteChunk : IBinaryReadableChunk<PaletteChunk>
 	public byte[] ForFuture { get; set; } = new byte[8]; // 8Bytes
 
 	public PaletteEntry[] Entries { get; set; }
+
+	public Rgba32[] GetPaletteColors()
+	{
+		return Entries.Select(x => x.Color.ToRgba32()).ToArray();
+	}
 
 	public class PaletteEntry : IBinaryReadable<PaletteEntry>
 	{
@@ -40,8 +47,8 @@ public class PaletteChunk : IBinaryReadableChunk<PaletteChunk>
 		ret.FirstColorIndexToChange = reader.ReadUInt32();
 		ret.LastColorIndexToChange = reader.ReadInt32();
 		ret.ForFuture = reader.ReadBytes(8);
-		
-		ret.Entries = new PaletteEntry[ret.PaletteSize];
+
+		ret.Entries = new PaletteEntry[ret.LastColorIndexToChange - ret.FirstColorIndexToChange + 1];
 		for (int i = 0; i < ret.PaletteSize; i++)
 		{
 			ret.Entries[i] = PaletteEntry.ReadBinary(reader);
