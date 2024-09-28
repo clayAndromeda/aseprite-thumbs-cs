@@ -1,4 +1,4 @@
-namespace AsepriteThumbs.FileFormats;
+namespace AsepriteLoader.FileFormats;
 
 public static class ChunkTypes
 {
@@ -22,7 +22,7 @@ public class ChunkHeader : IBinaryReadable<ChunkHeader>
 {
 	public uint ChunkSize { get; set; }
 	public ushort ChunkType { get; set; }
-	
+
 	public static ChunkHeader ReadBinary(BinaryReader reader)
 	{
 		var ret = new ChunkHeader();
@@ -31,4 +31,3 @@ public class ChunkHeader : IBinaryReadable<ChunkHeader>
 		return ret;
 	}
 }
-

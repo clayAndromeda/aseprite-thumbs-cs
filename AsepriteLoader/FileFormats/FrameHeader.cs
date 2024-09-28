@@ -1,4 +1,4 @@
-namespace AsepriteThumbs.FileFormats;
+namespace AsepriteLoader.FileFormats;
 
 public class FrameHeader : IBinaryReadable<FrameHeader>
 {
@@ -8,7 +8,7 @@ public class FrameHeader : IBinaryReadable<FrameHeader>
 	public ushort FrameDuration { get; set; }
 	public byte[] ForFuture { get; set; } = new byte[2];
 	public uint TheNumberOfChunks { get; set; }
-	
+
 	public static FrameHeader ReadBinary(BinaryReader reader)
 	{
 		var ret = new FrameHeader();

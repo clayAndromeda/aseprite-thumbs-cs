@@ -1,4 +1,4 @@
-﻿using AsepriteThumbs.FileFormats;
+﻿using AsepriteLoader.FileFormats;
 using ConsoleAppFramework;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;

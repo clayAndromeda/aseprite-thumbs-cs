@@ -1,4 +1,4 @@
-namespace AsepriteThumbs.FileFormats;
+namespace AsepriteLoader.FileFormats;
 
 public interface IBinaryReadable<T>
 {

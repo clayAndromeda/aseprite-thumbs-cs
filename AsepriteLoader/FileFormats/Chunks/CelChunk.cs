@@ -1,13 +1,13 @@
 using System.IO.Compression;
 using SixLabors.ImageSharp.PixelFormats;
 
-namespace AsepriteThumbs.FileFormats.Chunks;
+namespace AsepriteLoader.FileFormats.Chunks;
 
 public class CelChunk : IBinaryReadableChunk<CelChunk>
 {
 	/*
 	 * Cel Chunk (0x2005)
-	 * 
+	 *
 	 * This chunk determine where to put a cel in the specified layer/frame.
 	 *
 	 * CelType (WORD)
@@ -16,7 +16,7 @@ public class CelChunk : IBinaryReadableChunk<CelChunk>
 	 *  2 - Compressed Image
 	 *  3 - Compression TileMap (unsupported)
 	 */
-	
+
 	public ushort LayerIndex { get; set; } // 2Bytes
 	public short XPosition { get; set; } // 2Bytes
 	public short YPosition { get; set; } // 2Bytes
@@ -24,61 +24,11 @@ public class CelChunk : IBinaryReadableChunk<CelChunk>
 	public ushort CelType { get; set; } // 2Bytes
 	public short ZIndex { get; set; } // 2Bytes
 	public byte[] ForFuture { get; set; } = new byte[5]; // 5Bytes
-	
+
 	// 共通で合計16Bytes使う
-	
+
 	public ImageData Data { get; set; }
 
-	public class ImageData
-	{
-		public ushort Width { get; set; }
-		public ushort Height { get; set; }
-		public byte[] ImageBytes { get; set; }
-	}
-
-	public class LinkedCel { /* (unsupported) */ }
-	public class TileMap { /* (unsupported) */ }
-
-	public Rgba32[] GetPixels(ushort colorDepth, Rgba32[] palette)
-	{
-		Rgba32[] ret = new Rgba32[Data.Width * Data.Height];
-		if (colorDepth == 32)
-		{
-			for (int i = 0; i < ret.Length; ++i)
-			{
-				ret[i] = new Rgba32(
-					Data.ImageBytes[i * 4 + 0],
-					Data.ImageBytes[i * 4 + 1],
-					Data.ImageBytes[i * 4 + 2],
-					Data.ImageBytes[i * 4 + 3]);
-			}
-		}
-		else if (colorDepth == 16)
-		{
-			for (int i = 0; i < ret.Length; ++i)
-			{
-				ret[i] = new Rgba32(
-					Data.ImageBytes[i * 2 + 0],
-					Data.ImageBytes[i * 2 + 0],
-					Data.ImageBytes[i * 2 + 0],
-					Data.ImageBytes[i * 2 + 1]);
-			}
-		}
-		else if (colorDepth == 8)
-		{
-			for (int i = 0; i < ret.Length; ++i)
-			{
-				ret[i] = palette[Data.ImageBytes[i]];
-			}
-		}
-		else
-		{
-			throw new NotSupportedException($"Unsupported ColorDepth: {colorDepth}");
-		}
-
-		return ret;
-	}
-	
 	public static CelChunk ReadBinary(BinaryReader reader, ChunkHeader header)
 	{
 		var ret = new CelChunk();
@@ -109,7 +59,7 @@ public class CelChunk : IBinaryReadableChunk<CelChunk>
 			ret.Data.Height = reader.ReadUInt16();
 			// ChunkHeaderで6Bytes, CelChunk本体で16 + 4, 合計26Bytesを読み込んだ残りが画像データ
 			var compressedBytes = reader.ReadBytes((int)(header.ChunkSize - 26));
-			
+
 			// ZLibStreamで解凍する
 			using var ms = new MemoryStream(compressedBytes);
 			using var ds = new ZLibStream(ms, CompressionMode.Decompress);
@@ -127,5 +77,48 @@ public class CelChunk : IBinaryReadableChunk<CelChunk>
 		}
 
 		return ret;
+	}
+
+	public Rgba32[] GetPixels(ushort colorDepth, Rgba32[] palette)
+	{
+		var ret = new Rgba32[Data.Width * Data.Height];
+		if (colorDepth == 32)
+			for (var i = 0; i < ret.Length; ++i)
+				ret[i] = new Rgba32(
+					Data.ImageBytes[i * 4 + 0],
+					Data.ImageBytes[i * 4 + 1],
+					Data.ImageBytes[i * 4 + 2],
+					Data.ImageBytes[i * 4 + 3]);
+		else if (colorDepth == 16)
+			for (var i = 0; i < ret.Length; ++i)
+				ret[i] = new Rgba32(
+					Data.ImageBytes[i * 2 + 0],
+					Data.ImageBytes[i * 2 + 0],
+					Data.ImageBytes[i * 2 + 0],
+					Data.ImageBytes[i * 2 + 1]);
+		else if (colorDepth == 8)
+			for (var i = 0; i < ret.Length; ++i)
+				ret[i] = palette[Data.ImageBytes[i]];
+		else
+			throw new NotSupportedException($"Unsupported ColorDepth: {colorDepth}");
+
+		return ret;
+	}
+
+	public class ImageData
+	{
+		public ushort Width { get; set; }
+		public ushort Height { get; set; }
+		public byte[] ImageBytes { get; set; }
+	}
+
+	public class LinkedCel
+	{
+		/* (unsupported) */
+	}
+
+	public class TileMap
+	{
+		/* (unsupported) */
 	}
 }

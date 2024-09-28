@@ -1,4 +1,4 @@
-namespace AsepriteThumbs.FileFormats.Chunks;
+namespace AsepriteLoader.FileFormats.Chunks;
 
 public interface IBinaryReadableChunk<T>
 {

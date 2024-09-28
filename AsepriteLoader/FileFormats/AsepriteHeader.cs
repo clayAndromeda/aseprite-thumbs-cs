@@ -1,4 +1,4 @@
-namespace AsepriteThumbs.FileFormats;
+namespace AsepriteLoader.FileFormats;
 
 public class AsepriteHeader : IBinaryReadable<AsepriteHeader>
 {
@@ -21,7 +21,7 @@ public class AsepriteHeader : IBinaryReadable<AsepriteHeader>
 	public short YPositionOfGrid { get; set; }
 	public ushort GridWidth { get; set; }
 	public ushort GridHeight { get; set; }
-	
+
 	// この後に84Bytesの予約領域がある
 
 	public static AsepriteHeader ReadBinary(BinaryReader reader)
@@ -46,16 +46,17 @@ public class AsepriteHeader : IBinaryReadable<AsepriteHeader>
 		ret.YPositionOfGrid = reader.ReadInt16();
 		ret.GridWidth = reader.ReadUInt16();
 		ret.GridHeight = reader.ReadUInt16();
-		
+
 		// 84Bytesだけ、予約領域を捨てReadする
 		reader.ReadBytes(84);
-		
+
 		return ret;
 	}
 
 	public override string ToString()
 	{
 		// プロパティを改行区切りで出力
-		return string.Join("\n", GetType().GetProperties().Select(p => $"{p.Name}: {p.GetValue(this)} ({p.GetValue(this):X})"));
+		return string.Join("\n",
+			GetType().GetProperties().Select(p => $"{p.Name}: {p.GetValue(this)} ({p.GetValue(this):X})"));
 	}
 }

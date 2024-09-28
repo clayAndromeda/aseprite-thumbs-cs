@@ -1,9 +1,9 @@
-namespace AsepriteThumbs.FileFormats.Chunks;
+namespace AsepriteLoader.FileFormats.Chunks;
 
 public class NotSupportedChunk : IBinaryReadableChunk<NotSupportedChunk>
 {
-	byte[] Data { get; set; }
-	
+	private byte[] Data { get; set; }
+
 	public static NotSupportedChunk ReadBinary(BinaryReader reader, ChunkHeader header)
 	{
 		var ret = new NotSupportedChunk();
