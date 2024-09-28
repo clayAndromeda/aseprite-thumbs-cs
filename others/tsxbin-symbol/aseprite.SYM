@@ -79,7 +79,14 @@ void Frame(void)
         else if (chunk_type == 0x2005)
         {
             // cel_chunk
-            $BYTE cel_chunk_data[chunk_size - 6];
+            $WORD  cel_chunk_layer_index;
+            $SHORT cel_chunk_x_position;
+            $SHORT cel_chunk_y_position;
+            $BYTE  cel_chunk_opacity_level;
+            $WORD  cel_chunk_cel_type;
+            $SHORT cel_chunk_z_index;
+            $BYTE future_bits[5];
+            $BYTE cel_chunk_data[chunk_size - 6 - 16];
         }
         else if (chunk_type == 0x2006)
         {
